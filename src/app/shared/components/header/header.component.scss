@@ -1,0 +1,36 @@
+@use '@angular/material' as mat;
+
+.header {
+  @include mat.toolbar-overrides((
+    container-background-color: var(--mat-sys-primary),
+    container-text-color: var(--mat-sys-on-primary)
+  ));
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0px 16px;
+  flex-wrap: nowrap;
+}
+
+.header-title {
+  display: flex;
+  flex-direction: row;
+  gap: 0px 8px;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.header-title h1 {
+  font-weight: 500;
+}
+
+.header-menu-button {
+  display: none;
+  @media (max-width: 768px) {
+    display: block;
+  }
+}

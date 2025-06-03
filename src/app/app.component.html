@@ -1,0 +1,22 @@
+<main class="main">
+  <app-header />
+
+  <mat-sidenav-container class="content-container">
+    <mat-sidenav mode="side" opened>
+      <mat-nav-list>
+        @for (route of navigation; track route) {
+          <a
+            mat-list-item
+            [routerLink]="route.link"
+          >
+            {{route.name}}
+          </a>
+        }
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="content">
+      <router-outlet />
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</main>

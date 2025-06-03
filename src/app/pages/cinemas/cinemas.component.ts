@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-cinemas',
   imports: [],
   templateUrl: './cinemas.component.html',
-  styleUrl: './cinemas.component.css'
+  styleUrl: './cinemas.component.scss'
 })
 export class CinemasComponent {
 

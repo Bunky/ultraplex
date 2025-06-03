@@ -1,0 +1,23 @@
+@use '@angular/material' as mat;
+
+.content-container {
+  @include mat.sidenav-overrides((
+    container-width: 240px,
+    content-background-color: #f2f7fa
+  ));
+
+  @include mat.list-overrides((
+    list-item-hover-label-text-color: var(--mat-sys-primary)
+  ));
+}
+
+.main {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-container {
+  width: 100%;
+  height: 100%;
+}

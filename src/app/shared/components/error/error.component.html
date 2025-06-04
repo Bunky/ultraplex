@@ -1,0 +1,15 @@
+<mat-icon class="icon">error</mat-icon>
+
+<div class="error-message">
+  <span class="header">
+    {{header()}}
+  </span>
+  <span class="description">
+    {{description()}}
+  </span>
+</div>
+
+<button mat-flat-button (click)="handleClick()">
+  <mat-icon>refresh</mat-icon>
+  Retry
+</button>

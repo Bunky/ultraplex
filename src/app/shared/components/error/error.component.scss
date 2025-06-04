@@ -1,0 +1,30 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 0;
+}
+
+.icon {
+  color: var(--mat-sys-error);
+  font-size: 36px;
+  width: 36px;
+  height: 36px;
+}
+
+.error-message {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.error-message .header {
+  font: var(--mat-sys-title-medium);
+  color: var(--mat-sys-primary);
+}
+
+.error-message .description {
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-secondary-container);
+}

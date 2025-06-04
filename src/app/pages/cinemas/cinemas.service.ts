@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { queryOptions } from '@tanstack/angular-query-experimental';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
+import { environment } from '@/environments/environments';
 
 export interface Data<T> {
   content: T;
@@ -43,6 +44,10 @@ export interface Cinema {
   screens: Screen[];
 }
 
+export interface NewCinema {
+  name: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -55,10 +60,19 @@ export class CinemasService {
       queryFn: () =>
         lastValueFrom(
           this.http.get<Data<Cinema[]>>(
-            'https://ultraplex-solutions.poc.iov42.net/api/v1/cinemas',
+            `${environment.api}/cinemas`,
           ),
         ),
     })
+  }
+
+  newCinema(cinema: NewCinema) {
+    return  lastValueFrom(
+      this.http.put<NewCinema>(
+        `${environment.api}/cinemas`,
+        cinema
+      ),
+    );
   }
 }
 

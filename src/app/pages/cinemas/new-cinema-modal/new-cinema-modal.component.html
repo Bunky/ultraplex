@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>New Cinema</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-dialog-content class="mat-typography">
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Cinema Name</mat-label>
+        <input matInput cdkFocusInitial type="text" formControlName="name" maxlength="100" minlength="3" required />
+        <mat-icon matPrefix>storefront</mat-icon>
+        <mat-hint align="end">{{form.controls.name.value?.length ?? 0}}/100</mat-hint>
+        <mat-error>
+          {{ form.controls.name | formErrorMessages:'The name' }}
+        </mat-error>
+      </mat-form-field>
+
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <div class="actions">
+      <button mat-stroked-button mat-dialog-close>Cancel</button>
+      <button
+        type="submit"
+        mat-flat-button
+        [disabled]="form.invalid || mutation.isPending()"
+      >
+        <mat-icon [class.spin]="mutation.isPending()">{{ mutation.isPending() ? 'autorenew' : 'add' }}</mat-icon>
+        Add
+      </button>
+    </div>
+  </mat-dialog-actions>
+</form>

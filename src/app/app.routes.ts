@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AppComponent } from './app.component';
+import { NewCinemaModalComponent } from './pages/cinemas/new-cinema-modal/new-cinema-modal.component';
 
 export const routes: Routes = [
   {
@@ -8,7 +9,13 @@ export const routes: Routes = [
   },
   {
     path: 'cinemas',
-    loadComponent: () => import('./pages/cinemas/cinemas.component').then((m) => m.CinemasComponent)
+    loadComponent: () => import('./pages/cinemas/cinemas.component').then((m) => m.CinemasComponent),
+    children: [
+      {
+        path: 'new',
+        component: NewCinemaModalComponent,
+      }
+    ]
   },
   {
     path: 'movies',

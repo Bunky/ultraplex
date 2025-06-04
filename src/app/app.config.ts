@@ -9,6 +9,12 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
-    provideTanStackQuery(new QueryClient(), withDevtools())
+    provideTanStackQuery(new QueryClient({
+      defaultOptions: {
+        queries: {
+          staleTime: 1000 * 60 * 5
+        }
+      }
+    }), withDevtools())
   ]
 };

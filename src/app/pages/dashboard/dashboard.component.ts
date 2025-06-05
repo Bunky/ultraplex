@@ -8,6 +8,7 @@ import { CinemasService } from '../cinemas/cinemas.service';
 import { injectQuery } from '@tanstack/angular-query-experimental';
 import { ErrorComponent } from '@/app/shared/components/error/error.component';
 import { LoadingComponent } from '@/app/shared/components/loading/loading.component';
+import { MoviesService } from '../movies/movies.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,11 +17,14 @@ import { LoadingComponent } from '@/app/shared/components/loading/loading.compon
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
-  private readonly service = inject(CinemasService);
-  protected readonly cinemas = injectQuery(() => this.service.cinemas());
+  private readonly cinemasService = inject(CinemasService);
+  protected readonly cinemas = injectQuery(() => this.cinemasService.cinemas());
+  private readonly moviesService = inject(MoviesService);
+  protected readonly movies = injectQuery(() => this.moviesService.movies());
 
   readonly metrics = computed(() => {
     const cinemasData = this.cinemas.data();
+    const moviesData = this.movies.data();
 
     return [
       {
@@ -30,6 +34,14 @@ export class DashboardComponent {
         isLoading: this.cinemas.isLoading(),
         isError: this.cinemas.isError(),
         retry: () => this.cinemas.refetch()
+      },
+      {
+        title: 'Movies',
+        route: ['movies'],
+        count: moviesData?.totalElements ?? 0,
+        isLoading: this.movies.isLoading(),
+        isError: this.movies.isError(),
+        retry: () => this.movies.refetch()
       },
     ];
   });

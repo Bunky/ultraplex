@@ -1,0 +1,8 @@
+<button
+  [type]="type()"
+  mat-flat-button
+  [disabled]="disabled()"
+>
+  <mat-icon [class.spin]="loading()">{{ loading() ? 'autorenew' : icon() }}</mat-icon>
+  <ng-content></ng-content>
+</button>

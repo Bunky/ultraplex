@@ -1,5 +1,6 @@
 <app-page-header
   title="Cinemas"
+  (refresh)="retry.bind(this)"
 >
   <button
     mat-flat-button
@@ -12,7 +13,6 @@
 </app-page-header>
 
 <div class="table-container">
-
   @if (this.cinemas.isPending()) {
     <app-loading [size]="35" />
   } @else if (this.cinemas.isError()) {

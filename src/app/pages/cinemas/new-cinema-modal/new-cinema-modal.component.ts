@@ -9,10 +9,11 @@ import { injectMutation, QueryClient } from '@tanstack/angular-query-experimenta
 import { CinemasService, NewCinema } from '../cinemas.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormErrorMessagesPipe } from '@pipes/form-error-messages.pipe';
+import { AsyncButtonComponent } from '@/app/shared/components/async-button/async-button.component';
 
 @Component({
   selector: 'app-new-cinema-modal',
-  imports: [MatButtonModule, MatDialogModule, MatIconModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, FormErrorMessagesPipe],
+  imports: [MatButtonModule, MatDialogModule, MatIconModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, FormErrorMessagesPipe, AsyncButtonComponent],
   templateUrl: './new-cinema-modal.component.html',
   styleUrl: './new-cinema-modal.component.scss'
 })

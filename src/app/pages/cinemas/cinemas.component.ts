@@ -8,7 +8,7 @@ import { ErrorComponent } from '@components/error/error.component';
 import { NoDataComponent } from '@components/no-data/no-data.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute, NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { NewCinemaModalComponent } from './new-cinema-modal/new-cinema-modal.component';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -26,7 +26,6 @@ import { PageHeaderComponent } from '@/app/shared/components/page-header/page-he
     MatButtonModule,
     MatIconModule,
     RouterModule,
-    RouterOutlet,
     PageHeaderComponent
   ],
   templateUrl: './cinemas.component.html',

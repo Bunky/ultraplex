@@ -1,0 +1,19 @@
+<div class="page-header">
+  <div class="page-title">
+    <h2>{{title()}}</h2>
+    @if (refresh()) {
+      <button
+        mat-icon-button
+        aria-label="Refresh"
+        (click)="handleRefresh()"
+        matTooltip="Refresh"
+      >
+        <mat-icon>refresh</mat-icon>
+      </button>
+    }
+  </div>
+  
+  <div class="page-header-actions">
+    <ng-content></ng-content>
+  </div>
+</div>

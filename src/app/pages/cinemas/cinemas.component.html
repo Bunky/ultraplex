@@ -1,16 +1,6 @@
-<div class="page-header">
-  <div class="page-title">
-    <h2>Cinemas</h2>
-    <button
-      mat-icon-button
-      aria-label="Refresh Cinemas"
-      (click)="retry()"
-      matTooltip="Refresh Cinemas"
-    >
-      <mat-icon>refresh</mat-icon>
-    </button>
-
-  </div>
+<app-page-header
+  title="Cinemas"
+>
   <button
     mat-flat-button
     [routerLink]="['new']"
@@ -19,7 +9,7 @@
     <mat-icon>add</mat-icon>
     Add Cinema
   </button>
-</div>
+</app-page-header>
 
 <div class="table-container">
 

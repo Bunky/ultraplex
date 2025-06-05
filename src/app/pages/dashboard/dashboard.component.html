@@ -1,1 +1,71 @@
-<p>dashboard works!</p>
+<app-page-header
+  title="Dashboard"
+>
+  <button
+    mat-stroked-button
+    [routerLink]="['cinemas', 'new']"
+    aria-label="Add New Cinema"
+  >
+    <mat-icon>add</mat-icon>
+    Add Cinema
+  </button>
+  <button
+    mat-flat-button
+    [routerLink]="['movies', 'new']"
+    aria-label="Add New Movie"
+    disabled
+  >
+    <mat-icon>add</mat-icon>
+    Add Movie
+  </button>
+  <button
+    mat-flat-button
+    [routerLink]="['cinemas', 'new']"
+    aria-label="Create Screening"
+    disabled
+  >
+    <mat-icon>add</mat-icon>
+    Create Screening
+  </button>
+  <button
+    mat-flat-button
+    [routerLink]="['bookings', 'new']"
+    aria-label="Create Booking"
+    disabled
+  >
+    <mat-icon>add</mat-icon>
+    Create Booking
+  </button>
+</app-page-header>
+
+<div class="metrics-container">
+  @for (metric of metrics(); track metric.title) {
+    <mat-card appearance="outlined" [class.loading]="metric.isLoading">
+      <mat-card-header>
+        <mat-card-title>{{metric.title}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (metric.isLoading) {
+          <app-loading [size]="25" />
+        } @else if (metric.isError) {
+          <app-error
+            header="Failed to load {{metric.title}}"
+            description="Please try again later."
+            [retry]="metric.retry.bind(metric)"
+          />
+        } @else {
+          <span>{{metric.count}}</span>
+        }
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button
+          mat-button
+          [routerLink]="metric.route"
+        >
+          View {{metric.title}}
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  }
+</div>

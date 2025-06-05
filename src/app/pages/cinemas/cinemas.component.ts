@@ -13,10 +13,22 @@ import { MatDialog } from '@angular/material/dialog';
 import { NewCinemaModalComponent } from './new-cinema-modal/new-cinema-modal.component';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { filter } from 'rxjs/internal/operators/filter';
+import { PageHeaderComponent } from '@/app/shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-cinemas',
-  imports: [MatTableModule, MatPaginatorModule, LoadingComponent, ErrorComponent, NoDataComponent, MatButtonModule, MatIconModule, RouterModule, RouterOutlet],
+  imports: [
+    MatTableModule,
+    MatPaginatorModule,
+    LoadingComponent,
+    ErrorComponent,
+    NoDataComponent,
+    MatButtonModule,
+    MatIconModule,
+    RouterModule,
+    RouterOutlet,
+    PageHeaderComponent
+  ],
   templateUrl: './cinemas.component.html',
   styleUrl: './cinemas.component.scss'
 })

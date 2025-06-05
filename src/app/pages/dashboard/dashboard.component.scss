@@ -1,0 +1,18 @@
+.metrics-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
+  align-items: center;
+}
+
+.metrics-container mat-card {
+  flex: 1 1 0;
+  min-width: 200px;
+}
+
+.metrics-container mat-card.loading {
+  background-color: rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+}

@@ -73,7 +73,7 @@ export class CinemasComponent implements AfterViewInit, OnDestroy {
   protected readonly page = signal(0);
   protected readonly cinemas = injectQuery(() => this.service.cinemas(this.page(), 20));
   protected dataSource = new MatTableDataSource<Cinema>(this.cinemas.data()?.content || []);
-  protected displayedColumns = ['id', 'name'];
+  protected displayedColumns = ['id', 'name', 'screens'];
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;

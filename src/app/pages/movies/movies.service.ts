@@ -23,6 +23,11 @@ export class MoviesService {
   private readonly http = inject(HttpClient);
 
   movies(page?: number, pageSize?: number) {
+    const url = new URL(`${environment.api}/movies`);
+
+    if (page !== undefined) url.searchParams.append('page', page.toString());
+    if (pageSize !== undefined) url.searchParams.append('size', pageSize.toString());
+
     return queryOptions({
       queryKey: ['movies', page, pageSize],
       queryFn: () =>
@@ -35,9 +40,11 @@ export class MoviesService {
   }
 
   newMovie(movie: NewMovie) {
-    return  lastValueFrom(
+    const url = new URL(`${environment.api}/movies`);
+
+    return lastValueFrom(
       this.http.put<NewMovie>(
-        `${environment.api}/movies`,
+        url.toString(),
         movie
       ),
     );

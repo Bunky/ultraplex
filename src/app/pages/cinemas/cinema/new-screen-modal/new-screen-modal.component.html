@@ -1,31 +1,15 @@
-<h2 mat-dialog-title>New Movie</h2>
+<h2 mat-dialog-title>New Screen</h2>
 
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <mat-dialog-content class="mat-typography">
 
     <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Movie Name</mat-label>
+      <mat-label>Screen Name</mat-label>
       <input matInput cdkFocusInitial type="text" formControlName="name" maxlength="100" minlength="3" required />
-      <mat-icon matPrefix>storefront</mat-icon>
+      <mat-icon matPrefix>tv</mat-icon>
       <mat-hint align="end">{{form.controls.name.value?.length ?? 0}}/100</mat-hint>
       <mat-error>
         {{ form.controls.name | formErrorMessages:'The name' }}
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Runtime (minutes)</mat-label>
-      <input
-        matInput
-        type="number"
-        formControlName="runtime"
-        min="1"
-        max="1000"
-        required
-      />
-      <mat-icon matPrefix>timer</mat-icon>
-      <mat-error>
-        {{ form.controls.runtime | formErrorMessages:'The runtime' }}
       </mat-error>
     </mat-form-field>
 

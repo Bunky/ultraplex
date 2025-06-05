@@ -31,7 +31,7 @@ import { NewMovieModalComponent } from './new-movie-modal/new-movie-modal.compon
   styleUrl: './movies.component.scss'
 })
 export class MoviesComponent implements AfterViewInit, OnDestroy {
-readonly queryClient = inject(QueryClient)
+  readonly queryClient = inject(QueryClient)
   private readonly service = inject(MoviesService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);

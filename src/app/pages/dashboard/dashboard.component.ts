@@ -18,9 +18,20 @@ import { MoviesService } from '../movies/movies.service';
 })
 export class DashboardComponent {
   private readonly cinemasService = inject(CinemasService);
-  protected readonly cinemas = injectQuery(() => this.cinemasService.cinemas());
+  protected readonly cinemas = injectQuery(() => this.cinemasService.cinemas(0, 100));
   private readonly moviesService = inject(MoviesService);
   protected readonly movies = injectQuery(() => this.moviesService.movies());
+
+  readonly screenCount = computed(() => {
+    const cinemasData = this.cinemas.data();
+
+    // While this does work, it's far from the perfect solution.
+    // Ideally metrics like this would be exposed through a seperate endpoint and handled server side.
+    return cinemasData?.content.reduce((total, cinema) => {
+      total += cinema.screens.length;
+      return total;
+    }, 0) ?? 0;
+  });
 
   readonly metrics = computed(() => {
     const cinemasData = this.cinemas.data();
@@ -31,6 +42,14 @@ export class DashboardComponent {
         title: 'Cinemas',
         route: ['cinemas'],
         count: cinemasData?.totalElements ?? 0,
+        isLoading: this.cinemas.isLoading(),
+        isError: this.cinemas.isError(),
+        retry: () => this.cinemas.refetch()
+      },
+      {
+        title: 'Screens',
+        route: ['cinemas'],
+        count: this.screenCount(),
         isLoading: this.cinemas.isLoading(),
         isError: this.cinemas.isError(),
         retry: () => this.cinemas.refetch()

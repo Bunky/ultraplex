@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { queryOptions } from '@tanstack/angular-query-experimental';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { environment } from '@/environments/environments';
+import { Movie } from '../movies/movies.service';
 
 export interface Data<T> {
   content: T;
@@ -52,6 +53,19 @@ export interface NewCinema {
   name: string;
 }
 
+export interface Screening {
+  id: number;
+  cinemaName: string;
+  screenName: string;
+  start: string;
+  movie: Movie;
+}
+
+export interface NewScreening {
+  startTime: string;
+  movieId: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -70,7 +84,7 @@ export class CinemasService {
         lastValueFrom(
           this.http.get<Data<Cinema[]>>(url.toString()),
         )
-    })
+    });
   }
 
   newCinema(cinema: NewCinema) {
@@ -89,6 +103,31 @@ export class CinemasService {
     return lastValueFrom(
       this.http.put<NewScreen>(url.toString(),
         screen
+      )
+    );
+  }
+
+  screenings(cinemaId: number, page?: number, pageSize?: number) {
+    const url = new URL(`${environment.api}/cinemas/${cinemaId}/screenings`);
+
+    if (page !== undefined) url.searchParams.append('page', page.toString());
+    if (pageSize !== undefined) url.searchParams.append('size', pageSize.toString());
+
+    return queryOptions({
+      queryKey: ['screenings', cinemaId, page, pageSize],
+      queryFn: () =>
+        lastValueFrom(
+          this.http.get<Data<Screening[]>>(url.toString()),
+        )
+    })
+  }
+
+  newScreening(cinemaId: number, screenId: number, screening: NewScreening) {
+    const url = new URL(`${environment.api}/cinemas/${cinemaId}/screens/${screenId}/screenings`);
+
+    return lastValueFrom(
+      this.http.put<NewScreening>(url.toString(),
+        screening
       )
     );
   }

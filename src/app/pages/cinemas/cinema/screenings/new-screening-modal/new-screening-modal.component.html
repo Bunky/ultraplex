@@ -1,0 +1,72 @@
+<h2 mat-dialog-title>New Screening</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-dialog-content class="mat-typography">
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Movie</mat-label>
+      <input
+        type="text"
+        matInput
+        placeholder="Pick movie"
+        formControlName="movie"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMovieName">
+        @for (movie of filteredMovies(); track movie.id) {
+          <mat-option [value]="movie">{{movie.name}}</mat-option>
+        }
+      </mat-autocomplete>
+      <mat-error>
+        {{ form.controls.movie | formErrorMessages }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Date</mat-label>
+      <input
+        matInput
+        formControlName="date"
+        required
+        [matDatepicker]="datePicker"
+      />
+      <mat-datepicker-toggle matIconSuffix [for]="datePicker">
+        <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #datePicker />
+      <mat-error>
+        {{ form.controls.date | formErrorMessages:'The date' }}
+      </mat-error>
+    </mat-form-field>
+
+     <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Time</mat-label>
+      <input
+        matInput
+        formControlName="time"
+        required
+        [matTimepicker]="timePicker"
+      >
+      <mat-error>
+        {{ form.controls.time | formErrorMessages:'The time' }}
+      </mat-error>
+      <mat-timepicker-toggle matIconSuffix [for]="timePicker"/>
+      <mat-timepicker interval="30min" #timePicker />
+    </mat-form-field>
+
+
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <div class="actions">
+      <button mat-stroked-button mat-dialog-close>Cancel</button>
+      <app-async-button
+        type="submit"
+        [loading]="mutation.isPending()"
+        [disabled]="form.invalid || mutation.isPending()"
+        icon="add"
+      >
+        Add
+      </app-async-button>
+    </div>
+  </mat-dialog-actions>
+</form>

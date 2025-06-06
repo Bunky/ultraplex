@@ -44,7 +44,6 @@ export class NewMovieModalComponent {
     }
   }))
 
-
   form = new FormGroup({
     name: new FormControl('', {
       validators: [
@@ -53,7 +52,7 @@ export class NewMovieModalComponent {
         Validators.maxLength(100)
       ]
     }),
-    runtime: new FormControl('', {
+    runtime: new FormControl(0, {
       validators: [
         Validators.required,
         Validators.min(1),
@@ -65,10 +64,7 @@ export class NewMovieModalComponent {
 
   onSubmit() {
     if (this.form.valid) {
-      this.mutation.mutate({
-        ...this.form.value,
-        runtime: this.form.value.runtime ?? 0        
-      } as NewMovie);
+      this.mutation.mutate(this.form.value as NewMovie);
     }
   }
 }

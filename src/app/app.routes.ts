@@ -3,6 +3,7 @@ import { AppComponent } from './app.component';
 import { NewCinemaModalComponent } from './pages/cinemas/new-cinema-modal/new-cinema-modal.component';
 import { NewMovieModalComponent } from './pages/movies/new-movie-modal/new-movie-modal.component';
 import { NewScreenModalComponent } from './pages/cinemas/cinema/new-screen-modal/new-screen-modal.component';
+import { NewScreeningModalComponent } from './pages/cinemas/cinema/screenings/new-screening-modal/new-screening-modal.component';
 
 export const routes: Routes = [
   {
@@ -26,6 +27,16 @@ export const routes: Routes = [
       {
         path: 'new',
         component: NewScreenModalComponent,
+      }
+    ]
+  },
+  {
+    path: 'cinemas/:cinemaId/screenings/:screenId',
+    loadComponent: () => import('./pages/cinemas/cinema/screenings/screenings.component').then((m) => m.ScreeningsComponent),
+    children: [
+      {
+        path: 'new',
+        component: NewScreeningModalComponent,
       }
     ]
   },

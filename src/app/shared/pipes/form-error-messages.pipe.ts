@@ -18,6 +18,15 @@ export class FormErrorMessagesPipe implements PipeTransform {
     if (control.errors['maxlength']) {
       return `${label} cannot be more than ${control.errors['maxlength'].requiredLength} characters.`;
     }
+    if (control.errors['movieNotFound']) {
+      return `Please select a valid movie.`;
+    }
+    if (control.errors['dateTimeInFuture']) {
+      return `Please choose a time in the future.`;
+    }
+    if (control.errors['pattern']) {
+      return `Please make sure runtime is a number.`;
+    }
 
     return undefined;
   }

@@ -1,21 +1,21 @@
 <app-page-header
-  [title]="cinema()?.name ?? 'Cinema'"
+  [title]="(this.cinema()?.name ?? 'Cinema') + ' - ' + (this.screen()?.name ?? 'Screen')"
   (refresh)="retry.bind(this)"
 >
   <button
     mat-flat-button
     [routerLink]="['new']"
-    aria-label="Add New Screen"
+    aria-label="Add New Screening"
   >
     <mat-icon>add</mat-icon>
-    Add Screen
+    Add Screening
   </button>
 </app-page-header>
 
 <div class="table-container">
-  @if (this.cinemas.isPending()) {
+  @if (this.screenings.isPending()) {
     <app-loading [size]="35" />
-  } @else if (this.cinemas.isError()) {
+  } @else if (this.screenings.isError()) {
     <app-error
       header="Failed to load screens"
       description="Please try again later."
@@ -29,22 +29,26 @@
         <td mat-cell *matCellDef="let element">{{element.id}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let element">{{element.name}}</td>
+      <!-- TODO: Can link movie to movies page -->
+      <ng-container matColumnDef="movie">
+        <th mat-header-cell *matHeaderCellDef>Movie</th>
+        <td mat-cell *matCellDef="let element">{{element.movie.name}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="start">
+        <th mat-header-cell *matHeaderCellDef>Time</th>
+        <td mat-cell *matCellDef="let element">{{element.start | date: 'short' }}</td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr
         mat-row
         *matRowDef="let row; columns: displayedColumns;"
-        class="row"
-        [routerLink]="['/cinemas', cinema()?.id, 'screenings', row.id]"
       ></tr>
 
       <tr *matNoDataRow>
         <td mat-cell colspan="2">
-          <app-no-data message="No screens available."></app-no-data>
+          <app-no-data message="No screenings available."></app-no-data>
         </td>
     </table>
   }
@@ -52,7 +56,7 @@
   <mat-paginator
     showFirstLastButtons
     [pageSize]="10"
-    aria-label="Select page of screens"
+    aria-label="Select page of screenings"
   >
   </mat-paginator>
 </div>

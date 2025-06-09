@@ -18,10 +18,22 @@ body { margin: 0; font-family: Inter, "Helvetica Neue", sans-serif; }
 .table-container {
   box-shadow: var(--mat-sys-level2);
   border-radius: var(--mat-sys-corner-medium);
-  overflow: hidden;
+  overflow-y: hidden;
+  overflow-x: auto;
+  position: relative;
+
+  table {
+    min-width: 600px;
+  }
 
   .mat-mdc-header-row {
     background-color: var(--mat-sys-surface-container-low);
+  }
+
+  mat-paginator {
+    position: sticky;
+    bottom: 0;
+    left: 0;
   }
 }
 

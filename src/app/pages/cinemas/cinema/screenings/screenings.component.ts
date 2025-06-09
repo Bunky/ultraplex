@@ -1,7 +1,7 @@
 import { ErrorComponent } from '@/app/shared/components/error/error.component';
 import { LoadingComponent } from '@/app/shared/components/loading/loading.component';
 import { NoDataComponent } from '@/app/shared/components/no-data/no-data.component';
-import { PageHeaderComponent } from '@/app/shared/components/page-header/page-header.component';
+import { Breadcrumb, PageHeaderComponent } from '@/app/shared/components/page-header/page-header.component';
 import { AfterViewInit, Component, computed, effect, inject, OnDestroy, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -34,24 +34,6 @@ import { NewScreeningModalComponent } from './new-screening-modal/new-screening-
   styleUrl: './screenings.component.scss'
 })
 export class ScreeningsComponent implements AfterViewInit, OnDestroy {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private dialog = inject(MatDialog);
-  private readonly service = inject(CinemasService);
-
-  protected readonly cinemas = injectQuery(() => this.service.cinemas(0, 100));
-  readonly cinema = computed(() => this.cinemas.data()?.content.find((c) => c.id === Number(this.route.snapshot.paramMap.get('cinemaId'))));  
-  readonly screen = computed(() => this.cinema()?.screens.find((s) => s.id === Number(this.route.snapshot.paramMap.get('screenId'))));
-
-  protected readonly screenings = injectQuery(() => this.service.screenings(this.cinema()?.id || 0));
-  readonly filteredScreenings = computed(() => this.screenings.data()?.content.filter((s) => s.screenName === this.screen()?.name));
-
-  private sub = new Subscription();
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  protected dataSource = new MatTableDataSource<Screening>(this.screenings.data()?.content || []);
-  protected displayedColumns = ['id', 'movie', 'start'];
-
   constructor() {
     effect(() => {
       this.dataSource.data = this.filteredScreenings() || [];
@@ -79,15 +61,45 @@ export class ScreeningsComponent implements AfterViewInit, OnDestroy {
     this.sub.add(routeWatcher);
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  ngAfterViewInit() {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
+  private readonly service = inject(CinemasService);
+
+  private readonly cinemas = injectQuery(() => this.service.cinemas(0, 100));
+  private readonly cinema = computed(() => this.cinemas.data()?.content.find((c) => c.id === Number(this.route.snapshot.paramMap.get('cinemaId'))));  
+  private readonly screen = computed(() => this.cinema()?.screens.find((s) => s.id === Number(this.route.snapshot.paramMap.get('screenId'))));
+
+  protected readonly screenings = injectQuery(() => this.service.screenings(this.cinema()?.id || 0));
+  protected readonly filteredScreenings = computed(() => this.screenings.data()?.content.filter((s) => s.screenName === this.screen()?.name));
+  protected dataSource = new MatTableDataSource<Screening>([]);
+  protected displayedColumns = ['movie', 'start'];
+  private sub = new Subscription();
+
+  protected readonly breadcrumbs = computed<Breadcrumb[]>(() => [
+    {
+      label: 'Cinemas',
+      route: ['/cinemas']
+    },
+    {
+      label: this.cinema()?.name || 'Loading...',
+      route: ['/cinemas', this.cinema()?.id ?? 0]
+    }, {
+      label: this.screen()?.name || 'Loading...'
+    }
+  ]);
+
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
-  retry() {
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
+
+  protected retry(): void {
     this.screenings.refetch();
   }
 }

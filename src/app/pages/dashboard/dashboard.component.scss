@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 .metrics-container {
   display: flex;
   flex-direction: row;
@@ -5,14 +7,25 @@
   gap: 16px;
   width: 100%;
   align-items: center;
+
+  mat-card {
+    flex: 1 1 0;
+    min-width: 200px;
+  }
+
+  mat-card.loading {
+    background-color: rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+  }
+
+  @include mat.card-overrides((
+    title-text-font: var(--mat-sys-title-small-font),
+    title-text-weight: var(--mat-sys-title-small-weight),
+    title-text-size: var(--mat-sys-title-small-size),
+    title-text-line-height: var(--mat-sys-title-small-line-height)
+  ));
 }
 
-.metrics-container mat-card {
-  flex: 1 1 0;
-  min-width: 200px;
-}
-
-.metrics-container mat-card.loading {
-  background-color: rgba(0, 0, 0, 0.1);
-  pointer-events: none;
+.metric-value {
+  font: var(--mat-sys-display-large)
 }

@@ -9,4 +9,5 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 })
 export class LoadingComponent {
   readonly size = input<number>(25);
+  readonly height = input<string>('100%');
 }

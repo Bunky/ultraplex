@@ -53,13 +53,14 @@
             [retry]="metric.retry.bind(metric)"
           />
         } @else {
-          <span>{{metric.count}}</span>
+          <span class="metric-value">{{metric.count}}</span>
         }
       </mat-card-content>
       <mat-card-actions align="end">
         <button
           mat-button
           [routerLink]="metric.route"
+          [disabled]="metric.disabled"
         >
           View {{metric.title}}
           <mat-icon>open_in_new</mat-icon>

@@ -1,19 +1,20 @@
 @use '@angular/material' as mat;
 
 .header {
-  @include mat.toolbar-overrides((
-    container-background-color: var(--mat-sys-primary),
-    container-text-color: var(--mat-sys-on-primary)
-  ));
-}
-
-.header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   gap: 0px 16px;
   flex-wrap: nowrap;
+  position: relative;
+  box-shadow: var(--mat-sys-level2);
+  z-index: 2;
+
+  @include mat.toolbar-overrides((
+    container-background-color: var(--mat-sys-primary),
+    container-text-color: var(--mat-sys-on-primary)
+  ));
 }
 
 .header-title {
@@ -22,10 +23,11 @@
   gap: 0px 8px;
   flex-wrap: nowrap;
   align-items: center;
-}
 
-.header-title h1 {
-  font-weight: 500;
+  h1 {
+    font-weight: 500;
+    margin: 0;
+  }
 }
 
 .header-menu-button {

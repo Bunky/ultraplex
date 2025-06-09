@@ -9,7 +9,13 @@
             mat-list-item
             [routerLink]="route.link"
           >
-            {{route.name}}
+            <div
+              class="nav-link"
+              [class.active]="isRouteActive(route.link)"
+            >
+              <mat-icon>{{route.icon}}</mat-icon>
+              <span>{{route.name}}</span>
+            </div>
           </a>
         }
       </mat-nav-list>

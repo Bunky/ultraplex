@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { QueryClient, injectMutation } from '@tanstack/angular-query-experimental';
 import { CinemasService, NewScreen } from '../../cinemas.service';
 import { AsyncButtonComponent } from '@/app/shared/components/async-button/async-button.component';
-import { FormErrorMessagesPipe } from '@/app/shared/pipes/form-error-messages.pipe';
+import { FieldErrorMessagesPipe } from '@/app/shared/pipes/field-error-messages.pipe';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,20 +20,20 @@ import { MatInputModule } from '@angular/material/input';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    FormErrorMessagesPipe,
+    FieldErrorMessagesPipe,
     AsyncButtonComponent
   ],
   templateUrl: './new-screen-modal.component.html',
   styleUrl: './new-screen-modal.component.scss'
 })
 export class NewScreenModalComponent {
-  readonly queryClient = inject(QueryClient);
+  private readonly queryClient = inject(QueryClient);
   private readonly service = inject(CinemasService);
-  private snackBar = inject(MatSnackBar);
-  private dialogRef = inject(MatDialogRef);
-  private cinemaId = inject(MAT_DIALOG_DATA) as number;
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly dialogRef = inject(MatDialogRef);
+  private readonly cinemaId = inject(MAT_DIALOG_DATA) as number;
 
-  readonly mutation = injectMutation(() => ({
+  protected readonly mutation = injectMutation(() => ({
     mutationFn: (screen: NewScreen) => this.service.newScreen(this.cinemaId, screen),
     onError: () => {
       this.snackBar.open('Failed to add new screen', 'Close');
@@ -45,7 +45,7 @@ export class NewScreenModalComponent {
     }
   }))
 
-  form = new FormGroup({
+  protected readonly form = new FormGroup({
     name: new FormControl('', {
       validators: [
         Validators.required,
@@ -55,7 +55,7 @@ export class NewScreenModalComponent {
     })
   });
 
-  onSubmit() {
+  protected onSubmit(): void {
     if (this.form.valid) {
       this.mutation.mutate(this.form.value as NewScreen);
     }

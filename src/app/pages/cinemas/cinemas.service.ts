@@ -4,54 +4,24 @@ import { queryOptions } from '@tanstack/angular-query-experimental';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { environment } from '@/environments/environments';
 import { Movie } from '../movies/movies.service';
+import { Data } from '@/app/shared/types/api.types';
 
-export interface Data<T> {
-  content: T;
-  pageable: {
-    sort: {
-      sorted: boolean;
-      unsorted: boolean;
-      empty: boolean;
-    };
-    offset: number;
-    pageNumber: number;
-    pageSize: number;
-    paged: boolean;
-    unpaged: boolean;
-  };
-  totalPages: number;
-  totalElements: number;
-  last: boolean;
-  size: number;
-  number: number;
-  sort: {
-    sorted: boolean;
-    unsorted: boolean;
-    empty: boolean;
-  };
-  numberOfElements: number;
-  first: boolean;
-  empty: boolean;
-}
-
-export interface Screen {
+export interface Screen extends NewScreen {
   id: number;
-  name: string;
-}
+};
 
 export interface NewScreen {
   name: string;
-}
+};
 
-export interface Cinema {
+export interface Cinema extends NewCinema {
   id: number;
-  name: string;
   screens: Screen[];
-}
+};
 
 export interface NewCinema {
   name: string;
-}
+};
 
 export interface Screening {
   id: number;
@@ -59,12 +29,12 @@ export interface Screening {
   screenName: string;
   start: string;
   movie: Movie;
-}
+};
 
 export interface NewScreening {
   startTime: string;
   movieId: number;
-}
+};
 
 @Injectable({
   providedIn: 'root'

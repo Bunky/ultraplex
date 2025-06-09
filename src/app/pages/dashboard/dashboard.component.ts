@@ -9,6 +9,17 @@ import { injectQuery } from '@tanstack/angular-query-experimental';
 import { ErrorComponent } from '@/app/shared/components/error/error.component';
 import { LoadingComponent } from '@/app/shared/components/loading/loading.component';
 import { MoviesService } from '../movies/movies.service';
+import { BookingsService } from '../../shared/services/bookings.service';
+
+interface Metric {
+  title: string;
+  count: number;
+  isLoading: boolean;
+  isError: boolean;
+  retry: () => void;
+  disabled?: boolean;
+  route: string[];
+};
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +32,8 @@ export class DashboardComponent {
   protected readonly cinemas = injectQuery(() => this.cinemasService.cinemas(0, 100));
   private readonly moviesService = inject(MoviesService);
   protected readonly movies = injectQuery(() => this.moviesService.movies());
+  private readonly bookingsService = inject(BookingsService);
+  protected readonly bookings = injectQuery(() => this.bookingsService.bookings());
 
   readonly screenCount = computed(() => {
     const cinemasData = this.cinemas.data();
@@ -33,9 +46,10 @@ export class DashboardComponent {
     }, 0) ?? 0;
   });
 
-  readonly metrics = computed(() => {
+  readonly metrics = computed<Metric[]>(() => {
     const cinemasData = this.cinemas.data();
     const moviesData = this.movies.data();
+    const bookingsData = this.bookings.data();
 
     return [
       {
@@ -61,6 +75,15 @@ export class DashboardComponent {
         isLoading: this.movies.isLoading(),
         isError: this.movies.isError(),
         retry: () => this.movies.refetch()
+      },
+      {
+        title: 'Bookings',
+        route: ['bookings'],
+        count: bookingsData?.totalElements ?? 0,
+        isLoading: this.bookings.isLoading(),
+        isError: this.bookings.isError(),
+        retry: () => this.bookings.refetch(),
+        disabled: true
       },
     ];
   });

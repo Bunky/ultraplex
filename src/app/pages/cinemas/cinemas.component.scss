@@ -1,7 +1,15 @@
 tr.row {
   cursor: pointer;
+
+  &:hover {
+    background-color: var(--mat-sys-primary-fixed);
+  }
 }
 
-tr.row:hover {
-  background-color: var(--mat-sys-primary-fixed);
+.mat-column-name {
+  flex: 0.2 0 300px;
+}
+
+.mat-column-screens {
+  flex: 1 0 100px;
 }

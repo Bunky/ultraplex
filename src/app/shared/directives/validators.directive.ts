@@ -1,8 +1,13 @@
 import { Movie } from "@/app/pages/movies/movies.service";
 import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
 
+interface DateTimeFormValue {
+  date: Date | null;
+  time: Date | null;
+};
+
 export function validateMovie(movies: Movie[] | null): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
+  return (control: AbstractControl<Movie | null>): ValidationErrors | null => {
     if (!movies) return null;
 
     const { value } = control;
@@ -11,7 +16,7 @@ export function validateMovie(movies: Movie[] | null): ValidatorFn {
 };
 
 const getFormDateTime = (form: FormGroup): Date | null => {
-  const { date, time } = form.value;
+  const { date, time } = form.value as DateTimeFormValue;
   if (!date || !time) return null;
 
   return new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes());

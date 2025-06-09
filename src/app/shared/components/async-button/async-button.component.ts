@@ -9,8 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './async-button.component.scss'
 })
 export class AsyncButtonComponent {
-  readonly loading = input<boolean>(false);
-  readonly icon = input<string>('save');
-  readonly type = input<string>('button');
-  readonly disabled = input<boolean>(false);
+  readonly loading = input.required<boolean>();
+  readonly icon = input.required<string>();
+  readonly type = input.required<string>();
+  readonly disabled = input.required<boolean>();
 }

@@ -13,6 +13,7 @@ import { PageHeaderComponent } from '@/app/shared/components/page-header/page-he
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { NewMovieModalComponent } from './new-movie-modal/new-movie-modal.component';
+import { FormatTimePipe } from '@/app/shared/pipes/format-time.pipe';
 
 @Component({
   selector: 'app-movies',
@@ -25,7 +26,8 @@ import { NewMovieModalComponent } from './new-movie-modal/new-movie-modal.compon
     MatButtonModule,
     MatIconModule,
     RouterModule,
-    PageHeaderComponent
+    PageHeaderComponent,
+    FormatTimePipe
   ],
   templateUrl: './movies.component.html',
   styleUrl: './movies.component.scss'
@@ -63,7 +65,7 @@ export class MoviesComponent implements AfterViewInit, OnDestroy {
     this.sub.add(routeWatcher);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
 
@@ -72,17 +74,17 @@ export class MoviesComponent implements AfterViewInit, OnDestroy {
   protected readonly page = signal(0);
   protected readonly movies = injectQuery(() => this.service.movies(this.page(), 20));
   protected dataSource = new MatTableDataSource<Movie>(this.movies.data()?.content || []);
-  protected displayedColumns = ['id', 'name', 'runtime'];
+  protected displayedColumns = ['name', 'runtime'];
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
-  onPageChange(event: PageEvent) {
+  onPageChange(event: PageEvent): void {
     this.page.set(event.pageIndex);
   }
 
-  retry() {
+  retry(): void {
     this.movies.refetch();
   }
 }

@@ -1,5 +1,5 @@
 import { AsyncButtonComponent } from '@/app/shared/components/async-button/async-button.component';
-import { FormErrorMessagesPipe } from '@/app/shared/pipes/form-error-messages.pipe';
+import { FieldErrorMessagesPipe } from '@/app/shared/pipes/field-error-messages.pipe';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,11 +15,12 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { dateTimeInFuture, validateMovie } from '@/app/shared/directives/validators.directive';
+import { FormErrorMessagesPipe } from '@/app/shared/pipes/form-error-messages.pipe';
 
 interface Properties {
   cinema: Cinema;
   screen: Screen;
-}
+};
 
 @Component({
   selector: 'app-new-screening-modal',
@@ -30,6 +31,7 @@ interface Properties {
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    FieldErrorMessagesPipe,
     FormErrorMessagesPipe,
     AsyncButtonComponent,
     MatAutocompleteModule,
@@ -40,22 +42,42 @@ interface Properties {
   styleUrl: './new-screening-modal.component.scss'
 })
 export class NewScreeningModalComponent {
-  readonly queryClient = inject(QueryClient);
+  constructor() {
+    this.form.controls.movie.valueChanges.subscribe((value) => {
+      if (typeof value === 'string') {
+        this.movieInput.set(value);
+      }
+    });
+
+    effect(() => {
+      const movies = this.movies.data()?.content ?? [];
+
+      if (movies.length > 0) {
+        this.form.controls.movie.setValidators([
+          Validators.required,
+          validateMovie(movies ?? [])
+        ]);
+        this.form.controls.movie.updateValueAndValidity({ emitEvent: false });
+      }
+    });
+  }
+
+  private readonly queryClient = inject(QueryClient);
   private readonly service = inject(CinemasService);
   private readonly moviesService = inject(MoviesService);
-  private snackBar = inject(MatSnackBar);
-  private dialogRef = inject(MatDialogRef);
-  private data = inject(MAT_DIALOG_DATA) as Properties;
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly dialogRef = inject(MatDialogRef);
+  private readonly data = inject(MAT_DIALOG_DATA) as Properties;
 
-  protected readonly movies = injectQuery(() => this.moviesService.movies(0, 100));
-  readonly movieInput = signal<string>('');
-  readonly filteredMovies = computed(() =>
+  private readonly movies = injectQuery(() => this.moviesService.movies(0, 100));
+  private readonly movieInput = signal<string>('');
+  protected readonly filteredMovies = computed(() =>
     this.movies.data()?.content.filter((m) =>
       m.name.toLowerCase().includes(this.movieInput().toLowerCase())
     ) ?? []
   );
 
-  readonly mutation = injectMutation(() => ({
+  protected readonly mutation = injectMutation(() => ({
     mutationFn: (screening: NewScreening) => this.service.newScreening(this.data.cinema.id, this.data.screen.id, screening),
     onError: () => {
       this.snackBar.open('Failed to add new screening', 'Close');
@@ -67,7 +89,7 @@ export class NewScreeningModalComponent {
     }
   }))
 
-  form = new FormGroup({
+  protected readonly form = new FormGroup({
     movie: new FormControl<Movie | null>(null, {
       validators: [
         Validators.required,
@@ -87,26 +109,7 @@ export class NewScreeningModalComponent {
     ]
   });
 
-  constructor() {
-    effect(() => {
-      const value = this.form.value.movie;
-      this.movieInput.set(typeof value === 'string' ? value : value?.name ?? '');
-    });
-
-    effect(() => {
-      const movies = this.movies.data()?.content ?? [];
-
-      if (movies.length > 0) {
-        this.form.controls.movie.setValidators([
-          Validators.required,
-          validateMovie(movies ?? [])
-        ]);
-        this.form.controls.movie.updateValueAndValidity({ emitEvent: false });
-      }
-    });
-  }
-
-  onSubmit() {
+  protected onSubmit(): void {
     if (this.form.valid && this.form.value.date && this.form.value.time) {
       const startTime = new Date(
         this.form.value.date.getFullYear(),
@@ -123,7 +126,7 @@ export class NewScreeningModalComponent {
     }
   }
 
-  displayMovieName(movie: Movie): string {
+  protected displayMovieName(movie: Movie): string {
     return movie?.name ?? '';
   }
 }

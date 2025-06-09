@@ -1,9 +1,4 @@
 import { Routes } from '@angular/router';
-import { AppComponent } from './app.component';
-import { NewCinemaModalComponent } from './pages/cinemas/new-cinema-modal/new-cinema-modal.component';
-import { NewMovieModalComponent } from './pages/movies/new-movie-modal/new-movie-modal.component';
-import { NewScreenModalComponent } from './pages/cinemas/cinema/new-screen-modal/new-screen-modal.component';
-import { NewScreeningModalComponent } from './pages/cinemas/cinema/screenings/new-screening-modal/new-screening-modal.component';
 
 export const routes: Routes = [
   {
@@ -16,7 +11,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'new',
-        component: NewCinemaModalComponent,
+        loadComponent: () => import('./pages/cinemas/new-cinema-modal/new-cinema-modal.component').then((m) => m.NewCinemaModalComponent),
       }
     ]
   },
@@ -26,7 +21,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'new',
-        component: NewScreenModalComponent,
+        loadComponent: () => import('./pages/cinemas/cinema/new-screen-modal/new-screen-modal.component').then((m) => m.NewScreenModalComponent),
       }
     ]
   },
@@ -36,7 +31,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'new',
-        component: NewScreeningModalComponent,
+        loadComponent: () => import('./pages/cinemas/cinema/screenings/new-screening-modal/new-screening-modal.component').then((m) => m.NewScreeningModalComponent),
       }
     ]
   },
@@ -46,12 +41,12 @@ export const routes: Routes = [
     children: [
       {
         path: 'new',
-        component: NewMovieModalComponent,
+        loadComponent: () => import('./pages/movies/new-movie-modal/new-movie-modal.component').then((m) => m.NewMovieModalComponent),
       }
     ]
   },
   {
     path: '**',
-    component: AppComponent // TODO: Handle 404 with a NotFoundComponent
+    loadComponent: () => import('./shared/components/page-not-found/page-not-found.component').then((m) => m.PageNotFoundComponent)
   }
 ];

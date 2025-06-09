@@ -9,7 +9,7 @@
       <mat-icon matPrefix>storefront</mat-icon>
       <mat-hint align="end">{{form.controls.name.value?.length ?? 0}}/100</mat-hint>
       <mat-error>
-        {{ form.controls.name | formErrorMessages:'The name' }}
+        {{ form.controls.name | fieldErrorMessages:'The name' }}
       </mat-error>
     </mat-form-field>
 

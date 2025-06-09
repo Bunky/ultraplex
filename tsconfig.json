@@ -20,6 +20,8 @@
       "@components/*": ["src/app/shared/components/*"],
       "@directives/*": ["src/app/shared/directives/*"],
       "@pipes/*": ["src/app/shared/pipes/*"],
+      "@services/*": ["src/app/shared/services/*"],
+      "@types/*": ["src/app/shared/types/*"],
     }
   },
   "angularCompilerOptions": {

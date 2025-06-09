@@ -1,6 +1,6 @@
 import { Component, inject, AfterViewInit, ViewChild, signal, effect, OnDestroy } from '@angular/core';
 import { Cinema, CinemasService } from './cinemas.service';
-import { injectQuery, QueryClient } from '@tanstack/angular-query-experimental';
+import { injectQuery } from '@tanstack/angular-query-experimental';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { LoadingComponent } from '@components/loading/loading.component';
@@ -32,14 +32,6 @@ import { PageHeaderComponent } from '@/app/shared/components/page-header/page-he
   styleUrl: './cinemas.component.scss'
 })
 export class CinemasComponent implements AfterViewInit, OnDestroy {
-  readonly queryClient = inject(QueryClient)
-  private readonly service = inject(CinemasService);
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private dialog = inject(MatDialog);
-
-  private sub = new Subscription();
-
   constructor() {
     effect(() => {
       const content = this.cinemas.data()?.content ?? [];
@@ -64,26 +56,32 @@ export class CinemasComponent implements AfterViewInit, OnDestroy {
     this.sub.add(routeWatcher);
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  private readonly service = inject(CinemasService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
 
   protected readonly page = signal(0);
   protected readonly cinemas = injectQuery(() => this.service.cinemas(this.page(), 20));
-  protected dataSource = new MatTableDataSource<Cinema>(this.cinemas.data()?.content || []);
-  protected displayedColumns = ['id', 'name', 'screens'];
+  protected readonly dataSource = new MatTableDataSource<Cinema>(this.cinemas.data()?.content || []);
+  protected readonly displayedColumns = ['name', 'screens'];
+  private sub = new Subscription();
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
-  onPageChange(event: PageEvent) {
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
+
+  onPageChange(event: PageEvent): void {
     this.page.set(event.pageIndex);
   }
 
-  retry() {
+  protected retry(): void {
     this.cinemas.refetch();
   }
 }

@@ -8,9 +8,11 @@
       <input matInput cdkFocusInitial type="text" formControlName="name" maxlength="100" minlength="3" required />
       <mat-icon matPrefix>storefront</mat-icon>
       <mat-hint align="end">{{form.controls.name.value?.length ?? 0}}/100</mat-hint>
-      <mat-error>
-        {{ form.controls.name | formErrorMessages:'The name' }}
-      </mat-error>
+      @if (form.controls.name.errors) {
+        <mat-error>
+          {{ form.controls.name | fieldErrorMessages:'The name' }}
+        </mat-error> 
+      }
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="full-width">
@@ -25,7 +27,7 @@
       />
       <mat-icon matPrefix>timer</mat-icon>
       <mat-error>
-        {{ form.controls.runtime | formErrorMessages:'The runtime' }}
+        {{ form.controls.runtime | fieldErrorMessages:'The runtime' }}
       </mat-error>
     </mat-form-field>
 

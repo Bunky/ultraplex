@@ -7,10 +7,74 @@ html {
       primary: ultraplex-theme.$primary-palette,
       theme-type: light
     ),
-    typography: Roboto,
+    typography: Inter,
     density: 0
   ));
 }
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Inter, "Helvetica Neue", sans-serif; }
+
+.table-container {
+  box-shadow: var(--mat-sys-level2);
+  border-radius: var(--mat-sys-corner-medium);
+  overflow: hidden;
+
+  .mat-mdc-header-row {
+    background-color: var(--mat-sys-surface-container-low);
+  }
+}
+
+@include mat.table-overrides((
+  row-item-outline-color: var(--mat-sys-surface-dim),
+));
+
+.table-container table {
+  width: 100%;
+
+  tr {
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+
+  td, th {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-dialog-actions.mat-mdc-dialog-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0 8px;
+  flex-wrap: nowrap;
+
+  .errors {
+    color: var(--mat-sys-error);
+    font: var(--mat-sys-label-large);
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0 8px;
+  }
+}
+
+form mat-dialog-content.mat-mdc-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px 0;
+}
+

@@ -1,20 +1,19 @@
 import { inject, Injectable } from '@angular/core';
 import { queryOptions } from '@tanstack/angular-query-experimental';
-import { Data } from '../cinemas/cinemas.service';
 import { environment } from '@/environments/environments';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
+import { Data } from '@/app/shared/types/api.types';
 
-export interface Movie {
+export interface Movie extends Omit<NewMovie, 'runtime'> {
   id: number;
-  name: string;
   runtime: number | null;
-}
+};
 
 export interface NewMovie {
   name: string;
   runtime: number;
-}
+};
 
 @Injectable({
   providedIn: 'root'

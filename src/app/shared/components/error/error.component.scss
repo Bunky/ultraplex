@@ -17,14 +17,14 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-}
 
-.error-message .header {
-  font: var(--mat-sys-title-medium);
-  color: var(--mat-sys-primary);
-}
+  .header {
+    font: var(--mat-sys-title-medium);
+    color: var(--mat-sys-primary);
+  }
 
-.error-message .description {
-  font: var(--mat-sys-body-medium);
-  color: var(--mat-sys-on-secondary-container);
+  .description {
+    font: var(--mat-sys-body-medium);
+    color: var(--mat-sys-on-secondary-container);
+  }
 }

@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { QueryClient, injectMutation } from '@tanstack/angular-query-experimental';
-import { FormErrorMessagesPipe } from '@/app/shared/pipes/form-error-messages.pipe';
+import { FieldErrorMessagesPipe } from '@/app/shared/pipes/field-error-messages.pipe';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,19 +20,19 @@ import { AsyncButtonComponent } from '@/app/shared/components/async-button/async
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    FormErrorMessagesPipe,
+    FieldErrorMessagesPipe,
     AsyncButtonComponent
   ],
   templateUrl: './new-movie-modal.component.html',
   styleUrl: './new-movie-modal.component.scss'
 })
 export class NewMovieModalComponent {
-  readonly queryClient = inject(QueryClient);
+  private readonly queryClient = inject(QueryClient);
   private readonly service = inject(MoviesService);
-  private snackBar = inject(MatSnackBar);
-  private dialogRef = inject(MatDialogRef);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly dialogRef = inject(MatDialogRef);
 
-  readonly mutation = injectMutation(() => ({
+  protected readonly mutation = injectMutation(() => ({
     mutationFn: (movie: NewMovie) => this.service.newMovie(movie),
     onError: () => {
       this.snackBar.open('Failed to add new movie', 'Close');
@@ -44,7 +44,7 @@ export class NewMovieModalComponent {
     }
   }))
 
-  form = new FormGroup({
+  protected readonly form = new FormGroup({
     name: new FormControl('', {
       validators: [
         Validators.required,
@@ -52,7 +52,7 @@ export class NewMovieModalComponent {
         Validators.maxLength(100)
       ]
     }),
-    runtime: new FormControl(0, {
+    runtime: new FormControl<number | null>(null, {
       validators: [
         Validators.required,
         Validators.min(1),
@@ -62,7 +62,7 @@ export class NewMovieModalComponent {
     })
   });
 
-  onSubmit() {
+  protected onSubmit(): void {
     if (this.form.valid) {
       this.mutation.mutate(this.form.value as NewMovie);
     }

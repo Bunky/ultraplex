@@ -9,7 +9,7 @@ import { filter, Subscription } from 'rxjs';
 import { ErrorComponent } from '@/app/shared/components/error/error.component';
 import { LoadingComponent } from '@/app/shared/components/loading/loading.component';
 import { NoDataComponent } from '@/app/shared/components/no-data/no-data.component';
-import { PageHeaderComponent } from '@/app/shared/components/page-header/page-header.component';
+import { Breadcrumb, PageHeaderComponent } from '@/app/shared/components/page-header/page-header.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { NewScreenModalComponent } from './new-screen-modal/new-screen-modal.component';
@@ -31,22 +31,6 @@ import { NewScreenModalComponent } from './new-screen-modal/new-screen-modal.com
   styleUrl: './cinema.component.scss'
 })
 export class CinemaComponent implements AfterViewInit, OnDestroy {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private dialog = inject(MatDialog);
-  private readonly service = inject(CinemasService);
-  protected readonly cinemas = injectQuery(() => this.service.cinemas(0, 100));
-
-  // This will only work if the cinema is on the currnet page...
-  // This would work a lot better with a dedicated /cinema/{id} route.
-  // Or just using data binding...
-  readonly cinema = computed(() => this.cinemas.data()?.content.find((c) => c.id === Number(this.route.snapshot.paramMap.get('id'))));  
-  private sub = new Subscription();
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  protected dataSource = new MatTableDataSource<Screen>(this.cinema()?.screens || []);
-  protected displayedColumns = ['id', 'name'];
-
   constructor() {
     effect(() => {
       this.dataSource.data = this.cinema()?.screens || [];
@@ -71,15 +55,41 @@ export class CinemaComponent implements AfterViewInit, OnDestroy {
     this.sub.add(routeWatcher);
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  ngAfterViewInit() {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
+  private readonly service = inject(CinemasService);
+  protected readonly cinemas = injectQuery(() => this.service.cinemas(0, 100));
+
+  // This will only work if the cinema is on the currnet page...
+  // This would work a lot better with a dedicated /cinema/{id} route.
+  // Or just using data binding...
+  protected readonly cinema = computed(() => this.cinemas.data()?.content.find((c) => c.id === Number(this.route.snapshot.paramMap.get('id'))));  
+  protected readonly dataSource = new MatTableDataSource<Screen>(this.cinema()?.screens || []);
+  protected readonly displayedColumns = ['name'];
+  private sub = new Subscription();
+
+  protected readonly breadcrumbs = computed<Breadcrumb[]>(() => [
+    {
+      label: 'Cinemas',
+      route: ['/cinemas']
+    },
+    {
+      label: this.cinema()?.name || 'Loading...'
+    }
+  ]);
+
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
-  retry() {
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
+
+  protected retry(): void {
     this.cinemas.refetch();
   }
 }

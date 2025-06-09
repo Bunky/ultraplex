@@ -1,6 +1,6 @@
 <app-page-header
   title="Cinemas"
-  (refresh)="retry.bind(this)"
+  [refresh]="retry.bind(this)"
 >
   <button
     mat-flat-button
@@ -13,62 +13,57 @@
 </app-page-header>
 
 <div class="table-container">
-  @if (this.cinemas.isPending()) {
-    <app-loading [size]="35" />
-  } @else if (this.cinemas.isError()) {
-    <app-error
-      header="Failed to load Cinemas"
-      description="Please try again later."
-      [retry]="retry.bind(this)"
-    />
-  } @else {
-    <table mat-table [dataSource]="dataSource">
+  <table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">{{element.name}}</td>
+    </ng-container>
 
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef>ID</th>
-        <td mat-cell *matCellDef="let element">{{element.id}}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let element">{{element.name}}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="screens">
-        <th mat-header-cell *matHeaderCellDef>Screens</th>
-        <td mat-cell *matCellDef="let element">{{element.screens.length}}</td>
-      </ng-container>
+    <ng-container matColumnDef="screens">
+      <th mat-header-cell *matHeaderCellDef>Screens</th>
+      <td mat-cell *matCellDef="let element">{{element.screens.length}}</td>
+    </ng-container>
 
 
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element" class="actions-cell">
-          <button
-            mat-stroked-button
-          >
-            <mat-icon>add</mat-icon>
-            Add Screen
-          </button>
-        </td>
-      </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element" class="actions-cell">
+        <button
+          mat-stroked-button
+        >
+          <mat-icon>add</mat-icon>
+          Add Screen
+        </button>
+      </td>
+    </ng-container>
 
-      <tr
-        mat-header-row
-        *matHeaderRowDef="displayedColumns"
-      ></tr>
-      <tr
-        mat-row
-        *matRowDef="let row; columns: displayedColumns;"
-        class="row"
-        [routerLink]="['/cinemas', row.id]"
-      ></tr>
+    <tr
+      mat-header-row
+      *matHeaderRowDef="displayedColumns"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns;"
+      class="row"
+      [routerLink]="['/cinemas', row.id]"
+    ></tr>
 
-      <tr *matNoDataRow>
-        <td mat-cell colspan="2">
-          <app-no-data message="No cinemas available."></app-no-data>
-        </td>
-    </table>
-  }
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" [attr.colspan]="displayedColumns.length.toString()">
+        @if (this.cinemas.isPending()) {
+          <app-loading [size]="35" height="200px" />
+        } @else if (this.cinemas.isError()) {
+          <app-error
+            header="Failed to load cinemas"
+            description="Please try again later."
+            [retry]="retry.bind(this)"
+          />
+        } @else {
+          <app-no-data message="No cinemas available." height="200px"></app-no-data>    
+        }
+      </td>
+    </tr>
+  </table>
 
   <mat-paginator
     [length]="cinemas.data()?.numberOfElements"

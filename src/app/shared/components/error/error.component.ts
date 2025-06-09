@@ -15,7 +15,7 @@ export class ErrorComponent {
     console.warn('Retry function not provided');
   });
 
-  handleClick() {
+  protected handleClick(): void {
     this.retry()();
   }
 }

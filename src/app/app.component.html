@@ -1,8 +1,8 @@
 <main class="main">
-  <app-header />
+  <app-header [toggleSidebar]="toggleSidebar.bind(this)" />
 
   <mat-sidenav-container class="content-container">
-    <mat-sidenav mode="side" opened>
+    <mat-sidenav [mode]="isMobile() ? 'over' : 'side'" [opened]="open()">
       <mat-nav-list>
         @for (route of navigation; track route) {
           <a

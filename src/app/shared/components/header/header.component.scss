@@ -32,6 +32,8 @@
 
 .header-menu-button {
   display: none;
+  color: var(--mat-sys-on-primary);
+
   @media (max-width: 768px) {
     display: block;
   }

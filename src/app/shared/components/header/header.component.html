@@ -1,6 +1,11 @@
 <mat-toolbar class="header">
   <div class="header-title">
-    <button class="header-menu-button" mat-icon-button aria-label="Toggle navigation menu">
+    <button
+      class="header-menu-button"
+      mat-icon-button
+      aria-label="Toggle navigation menu"
+      (click)="handleClick()"
+    >
       <mat-icon>menu</mat-icon>
     </button>
 
